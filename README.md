@@ -71,3 +71,16 @@ src/
 ## License
 
 MIT
+
+---
+
+## Credits
+
+Built with [BlockSuite](https://github.com/toeverything/blocksuite) - A toolkit for building editors and collaborative applications.
+
+
+**BlockSuite Resources**:
+- [Documentation](https://blocksuite.io)
+- [API Reference](https://blocksuite.io/api)
+- [AFFiNE](https://github.com/toeverything/AFFiNE) - Production app using BlockSuite
+
