@@ -19,9 +19,30 @@ export function createEditorInstance() {
 
   const editor = new AffineEditorContainer();
   editor.doc = doc;
+  
+  // Prevent deletion of last paragraph block
+  doc.slots.blockUpdated.on(({ type }) => {
+    if (type === 'delete') {
+      const page = doc.getBlockByFlavour('affine:page')[0];
+      if (page) {
+        const notes = doc.getBlockByFlavour('affine:note');
+        if (notes.length > 0) {
+          const note = notes[0];
+          const paragraphs = doc.getBlockByFlavour('affine:paragraph');
+          // If no paragraphs left, add one back
+          if (paragraphs.length === 0) {
+            doc.addBlock('affine:paragraph', {}, note.id);
+          }
+        }
+      }
+    }
+  });
+  
   editor.slots.docLinkClicked.on(({ docId }) => {
-    const target = <Doc>collection.getDoc(docId);
-    editor.doc = target;
+    const target = collection.getDoc(docId);
+    if (target) {
+      editor.doc = target as Doc;
+    }
   });
 
   return { editor, collection };
