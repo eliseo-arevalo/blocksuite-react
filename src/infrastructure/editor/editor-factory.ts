@@ -20,7 +20,11 @@ export function createEditorInstance() {
   const editor = new AffineEditorContainer();
   editor.doc = doc;
   
-  // Prevent deletion of last paragraph block
+  /**
+   * FIX: Prevent editor crash when deleting all content (Ctrl+A → Delete)
+   * BlockSuite v0.15 bug: deleting all paragraphs breaks the DOM structure
+   * Solution: Auto-recreate an empty paragraph to maintain valid document state
+   */
   doc.slots.blockUpdated.on(({ type }) => {
     if (type === 'delete') {
       const page = doc.getBlockByFlavour('affine:page')[0];
