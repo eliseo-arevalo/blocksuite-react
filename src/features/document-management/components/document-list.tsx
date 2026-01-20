@@ -5,9 +5,17 @@ interface DocumentListProps {
   documents: Doc[];
   activeDoc: Doc | null;
   onDocumentSelect: (doc: Doc) => void;
+  onDocumentDelete: (docId: string) => void;
+  onDocumentRename: (docId: string, newTitle: string) => void;
 }
 
-export const DocumentList = ({ documents, activeDoc, onDocumentSelect }: DocumentListProps) => {
+export const DocumentList = ({ 
+  documents, 
+  activeDoc, 
+  onDocumentSelect,
+  onDocumentDelete,
+  onDocumentRename
+}: DocumentListProps) => {
   return (
     <div className="doc-list">
       {documents.map(doc => (
@@ -16,6 +24,8 @@ export const DocumentList = ({ documents, activeDoc, onDocumentSelect }: Documen
           doc={doc}
           isActive={activeDoc === doc}
           onClick={() => onDocumentSelect(doc)}
+          onDelete={() => onDocumentDelete(doc.id)}
+          onRename={(newTitle) => onDocumentRename(doc.id, newTitle)}
         />
       ))}
     </div>
