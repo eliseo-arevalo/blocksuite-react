@@ -1,9 +1,9 @@
 import React from 'react';
-import { initEditor } from '../editor/editor';
-import { EditorContext } from '../editor/context';
+import { createEditorInstance } from './editor-factory';
+import { EditorContext } from './editor-context';
 
 export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
-  const { editor, collection } = initEditor();
+  const { editor, collection } = createEditorInstance();
 
   return (
     <EditorContext.Provider value={{ editor, collection }}>

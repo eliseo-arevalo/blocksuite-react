@@ -4,13 +4,7 @@ import { DocCollection } from '@blocksuite/store';
 import { AffineSchemas } from '@blocksuite/blocks';
 import '@blocksuite/presets/themes/affine.css';
 
-export interface EditorContextType {
-  editor: AffineEditorContainer | null;
-  collection: DocCollection | null;
-  updateCollection: (newCollection: DocCollection) => void;
-}
-
-export function initEditor() {
+export function createEditorInstance() {
   const schema = new Schema().register(AffineSchemas);
   const collection = new DocCollection({ schema });
   collection.meta.initialize();
@@ -29,5 +23,6 @@ export function initEditor() {
     const target = <Doc>collection.getDoc(docId);
     editor.doc = target;
   });
+
   return { editor, collection };
 }

@@ -1,17 +1,15 @@
-import { EditorProvider } from './components/EditorProvider';
-import Sidebar from './components/Sidebar';
-import TopBar from './components/TopBar';
-import EditorContainer from './components/EditorContainer';
+import { EditorProvider } from '@infrastructure/editor';
+import { DocumentManagement } from '@features/document-management/document-management';
+import { DocumentEditor } from '@features/document-editor/document-editor';
 import './index.css';
 
 function App() {
   return (
     <EditorProvider>
       <div className="app">
-        <Sidebar />
+        <DocumentManagement />
         <div className="main-content">
-          <TopBar />
-          <EditorContainer />
+          <DocumentEditor />
         </div>
       </div>
     </EditorProvider>
