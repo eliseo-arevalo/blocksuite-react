@@ -1,54 +1,41 @@
-import { Doc } from '@blocksuite/store';
-import { useEditorContext } from '@infrastructure/editor';
-import { useDocuments } from './hooks/use-documents';
+import { useDocumentManagementLogic } from './hooks/use-document-management-logic';
 import { DocumentList } from './components/document-list';
-import { createDocument, deleteDocument, renameDocument } from './services/document-service';
 
 export const DocumentManagement = () => {
-  const { editor, collection } = useEditorContext();
-  const documents = useDocuments();
+  const {
+    documents,
+    activeDoc,
+    handleDocumentSelect,
+    handleCreateDocument,
+    handleDeleteDocument,
+    handleRenameDocument,
+  } = useDocumentManagementLogic();
 
-  const handleDocumentSelect = (doc: Doc) => {
-    editor.doc = doc;
-  };
-
-  const handleCreateDocument = () => {
+  const onCreateClick = () => {
     const title = prompt('Enter document title:');
-    if (title && title.trim()) {
-      const newDoc = createDocument(collection, title.trim());
-      editor.doc = newDoc;
+    if (title) {
+      handleCreateDocument(title);
     }
   };
 
-  const handleDeleteDocument = (docId: string) => {
-    if (documents.length <= 1) {
-      alert('Cannot delete the last document');
-      return;
+  const onDeleteClick = (docId: string) => {
+    const result = handleDeleteDocument(docId);
+    if (!result.success) {
+      alert(result.error);
     }
-    
-    if (editor.doc?.id === docId) {
-      const nextDoc = documents.find(d => d.id !== docId);
-      if (nextDoc) editor.doc = nextDoc;
-    }
-    
-    deleteDocument(collection, docId);
-  };
-
-  const handleRenameDocument = (docId: string, newTitle: string) => {
-    renameDocument(collection, docId, newTitle);
   };
 
   return (
     <div className="document-management">
       <div className="header">
         <span>All Docs</span>
-        <button onClick={handleCreateDocument} className="create-btn">+</button>
+        <button onClick={onCreateClick} className="create-btn">+</button>
       </div>
       <DocumentList
         documents={documents}
-        activeDoc={editor.doc}
+        activeDoc={activeDoc}
         onDocumentSelect={handleDocumentSelect}
-        onDocumentDelete={handleDeleteDocument}
+        onDocumentDelete={onDeleteClick}
         onDocumentRename={handleRenameDocument}
       />
     </div>
