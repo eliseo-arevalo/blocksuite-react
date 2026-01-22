@@ -1,0 +1,26 @@
+/* 
+ * External Library Overrides
+ * Estilos que sobrescriben o modifican librerías externas
+ */
+
+/* BlockSuite Editor Overrides */
+.editor-canvas * {
+  background-color: var(--bg-primary) !important;
+}
+
+.editor-canvas .affine-editor-container,
+.editor-canvas .affine-page-root,
+.editor-canvas .affine-default-page,
+.editor-canvas .affine-page-viewport,
+.editor-canvas .affine-block-children-container,
+.editor-canvas .affine-note-block-container,
+.editor-canvas [data-block-id] {
+  background-color: var(--bg-primary) !important;
+}
+
+/* Ensure text remains visible in BlockSuite */
+.editor-canvas .affine-paragraph-rich-text,
+.editor-canvas .affine-rich-text,
+.editor-canvas .inline-editor {
+  color: var(--text-primary) !important;
+}
