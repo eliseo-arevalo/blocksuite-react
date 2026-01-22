@@ -7,7 +7,8 @@ interface LayoutProps {
   documents: any[];
   activeDocId?: string;
   onDocumentSelect: (doc: any) => void;
-  onCreateDocument: () => void;
+  onCreateDocument: (title?: string, parentId?: string) => void;
+  onRenameDocument: (docId: string, newTitle: string) => void;
 }
 
 export const Layout = ({ 
@@ -15,7 +16,8 @@ export const Layout = ({
   documents, 
   activeDocId, 
   onDocumentSelect,
-  onCreateDocument 
+  onCreateDocument,
+  onRenameDocument 
 }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -28,6 +30,10 @@ export const Layout = ({
       <Header 
         onToggleSidebar={toggleSidebar}
         isSidebarOpen={isSidebarOpen}
+        documents={documents}
+        activeDocId={activeDocId}
+        onDocumentSelect={onDocumentSelect}
+        onRenameDocument={onRenameDocument}
       />
       
       <div className="layout-body">

@@ -19,9 +19,9 @@ export const useDocumentManagementLogic = () => {
     setActiveDoc(doc);
   };
 
-  const handleCreateDocument = (title: string) => {
+  const handleCreateDocument = (title: string, parentId?: string) => {
     if (title && title.trim()) {
-      const newDoc = createDocument(collection, title.trim());
+      const newDoc = createDocument(collection, title.trim(), parentId);
       editor.doc = newDoc;
       setActiveDoc(newDoc);
       return newDoc;
@@ -48,6 +48,10 @@ export const useDocumentManagementLogic = () => {
 
   const handleRenameDocument = (docId: string, newTitle: string) => {
     renameDocument(collection, docId, newTitle);
+    // Force UI update
+    if ((window as any).__forceDocumentsUpdate) {
+      (window as any).__forceDocumentsUpdate();
+    }
   };
 
   return {

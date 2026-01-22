@@ -8,12 +8,17 @@ export const AppContent = () => {
     activeDoc,
     handleDocumentSelect,
     handleCreateDocument,
+    handleRenameDocument,
   } = useDocumentManagementLogic();
 
-  const onCreateClick = () => {
-    const title = prompt('Enter document title:');
+  const onCreateClick = (title?: string, parentId?: string) => {
     if (title) {
-      handleCreateDocument(title);
+      handleCreateDocument(title, parentId);
+    } else {
+      const newTitle = prompt('Enter document title:');
+      if (newTitle) {
+        handleCreateDocument(newTitle, parentId);
+      }
     }
   };
 
@@ -23,6 +28,7 @@ export const AppContent = () => {
       activeDocId={activeDoc?.id}
       onDocumentSelect={handleDocumentSelect}
       onCreateDocument={onCreateClick}
+      onRenameDocument={handleRenameDocument}
     >
       <DocumentEditor />
     </Layout>

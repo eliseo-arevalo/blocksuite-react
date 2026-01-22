@@ -5,18 +5,16 @@ import { useEditorContext } from '@infrastructure/editor';
 export const useDocuments = () => {
   const { collection, editor } = useEditorContext();
   const [documents, setDocuments] = useState<Doc[]>([]);
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+
+  const forceUpdate = useCallback(() => {
+    setUpdateTrigger(prev => prev + 1);
+  }, []);
 
   const updateDocuments = useCallback(() => {
     const docs = [...collection.docs.values()].map(blocks => blocks.getDoc());
-    setDocuments(prevDocs => {
-      // Only update if documents actually changed
-      if (prevDocs.length !== docs.length || 
-          prevDocs.some((doc, i) => doc.id !== docs[i]?.id)) {
-        return docs;
-      }
-      return prevDocs;
-    });
-  }, [collection]);
+    setDocuments(docs);
+  }, [collection, updateTrigger]);
 
   useEffect(() => {
     updateDocuments();
@@ -28,6 +26,9 @@ export const useDocuments = () => {
 
     return () => disposables.forEach(d => d.dispose());
   }, [collection, editor, updateDocuments]);
+
+  // Expose forceUpdate for external use
+  (window as any).__forceDocumentsUpdate = forceUpdate;
 
   return documents;
 };

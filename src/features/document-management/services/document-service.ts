@@ -1,6 +1,6 @@
 import { DocCollection } from '@blocksuite/store';
 
-export const createDocument = (collection: DocCollection, title?: string) => {
+export const createDocument = (collection: DocCollection, title?: string, parentId?: string) => {
   const doc = collection.createDoc();
   doc.load(() => {
     const pageBlockId = doc.addBlock('affine:page', {});
@@ -9,8 +9,16 @@ export const createDocument = (collection: DocCollection, title?: string) => {
     doc.addBlock('affine:paragraph', {}, noteId);
   });
   
+  const meta: any = {};
   if (title) {
-    collection.setDocMeta(doc.id, { title });
+    meta.title = title;
+  }
+  if (parentId) {
+    meta.parentId = parentId;
+  }
+  
+  if (Object.keys(meta).length > 0) {
+    collection.setDocMeta(doc.id, meta);
   }
 
   /**
@@ -42,5 +50,6 @@ export const deleteDocument = (collection: DocCollection, docId: string) => {
 };
 
 export const renameDocument = (collection: DocCollection, docId: string, newTitle: string) => {
-  collection.setDocMeta(docId, { title: newTitle });
+  const existingMeta = collection.meta.getDocMeta(docId) || {};
+  collection.setDocMeta(docId, { ...existingMeta, title: newTitle });
 };
