@@ -3,11 +3,7 @@
  * Estilos que sobrescriben o modifican librerías externas
  */
 
-/* BlockSuite Editor Overrides */
-.editor-canvas * {
-  background-color: var(--bg-primary) !important;
-}
-
+/* BlockSuite Editor Overrides - Solo elementos del editor */
 .editor-canvas .affine-editor-container,
 .editor-canvas .affine-page-root,
 .editor-canvas .affine-default-page,

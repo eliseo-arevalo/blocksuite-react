@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Icon } from '@shared/components/icon';
+import { useEditorContext } from '@infrastructure/editor';
 
 interface TreeNode {
   id: string;
@@ -87,9 +88,10 @@ export const Sidebar = ({
   onDocumentSelect,
   onCreateDocument 
 }: SidebarProps) => {
+  const { collection } = useEditorContext();
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['root']));
 
-  const toggleNode = (id: string) => {
+  const toggleNode = useCallback((id: string) => {
     setExpandedNodes(prev => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -99,27 +101,27 @@ export const Sidebar = ({
       }
       return next;
     });
-  };
+  }, []);
 
-  const handleDocumentSelect = (docId: string) => {
+  const handleDocumentSelect = useCallback((docId: string) => {
     const doc = documents.find(d => d.id === docId);
     if (doc) {
       onDocumentSelect(doc);
     }
-  };
+  }, [documents, onDocumentSelect]);
 
-  // Transform documents to tree structure
-  const treeData: TreeNode = {
+  // Memoize tree data to avoid recalculation on every render
+  const treeData: TreeNode = useMemo(() => ({
     id: 'root',
     name: 'Documents',
     type: 'folder',
     isExpanded: expandedNodes.has('root'),
     children: documents.map(doc => ({
       id: doc.id,
-      name: doc.title,
+      name: collection.meta.getDocMeta(doc.id)?.title || `Document ${doc.id.slice(0, 8)}`,
       type: 'document' as const,
     }))
-  };
+  }), [documents, expandedNodes, collection]);
 
   if (!isOpen) return null;
 

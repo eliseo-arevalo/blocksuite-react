@@ -214,13 +214,13 @@ body {
   height: 16px;
   border: none;
   background: transparent;
-  color: inherit;
+  color: var(--text-secondary);
   cursor: pointer;
   border-radius: 2px;
 }
 
 .tree-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--bg-tertiary);
 }
 
 .tree-item-name {
@@ -228,6 +228,8 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--text-primary);
+  font-weight: 400;
 }
 
 /* Main Content */

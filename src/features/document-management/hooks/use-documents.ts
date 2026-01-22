@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Doc } from '@blocksuite/store';
 import { useEditorContext } from '@infrastructure/editor';
 
@@ -6,12 +6,19 @@ export const useDocuments = () => {
   const { collection, editor } = useEditorContext();
   const [documents, setDocuments] = useState<Doc[]>([]);
 
-  useEffect(() => {
-    const updateDocuments = () => {
-      const docs = [...collection.docs.values()].map(blocks => blocks.getDoc());
-      setDocuments(docs);
-    };
+  const updateDocuments = useCallback(() => {
+    const docs = [...collection.docs.values()].map(blocks => blocks.getDoc());
+    setDocuments(prevDocs => {
+      // Only update if documents actually changed
+      if (prevDocs.length !== docs.length || 
+          prevDocs.some((doc, i) => doc.id !== docs[i]?.id)) {
+        return docs;
+      }
+      return prevDocs;
+    });
+  }, [collection]);
 
+  useEffect(() => {
     updateDocuments();
 
     const disposables = [
@@ -20,7 +27,7 @@ export const useDocuments = () => {
     ];
 
     return () => disposables.forEach(d => d.dispose());
-  }, [collection, editor]);
+  }, [collection, editor, updateDocuments]);
 
   return documents;
 };
