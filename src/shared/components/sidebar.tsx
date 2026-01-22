@@ -96,6 +96,7 @@ const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: T
 interface SidebarProps {
   isOpen: boolean;
   documents: any[];
+  documentMap: Map<string, any>;
   activeDocId?: string;
   onDocumentSelect: (doc: any) => void;
   onCreateDocument: (title?: string, parentId?: string) => void;
@@ -104,6 +105,7 @@ interface SidebarProps {
 export const Sidebar = ({ 
   isOpen, 
   documents, 
+  documentMap,
   activeDocId, 
   onDocumentSelect,
   onCreateDocument 
@@ -133,11 +135,11 @@ export const Sidebar = ({
   }, [onCreateDocument]);
 
   const handleDocumentSelect = useCallback((docId: string) => {
-    const doc = documents.find(d => d.id === docId);
+    const doc = documentMap.get(docId);
     if (doc) {
       onDocumentSelect(doc);
     }
-  }, [documents, onDocumentSelect]);
+  }, [documentMap, onDocumentSelect]);
 
   // Build hierarchical tree structure
   const treeData: TreeNode[] = useMemo(() => {

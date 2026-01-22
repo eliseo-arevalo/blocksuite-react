@@ -5,6 +5,7 @@ import { useDocumentManagementLogic } from '@features/document-management/hooks/
 export const AppContent = () => {
   const {
     documents,
+    documentMap,
     activeDoc,
     handleDocumentSelect,
     handleCreateDocument,
@@ -25,6 +26,7 @@ export const AppContent = () => {
   return (
     <Layout
       documents={documents}
+      documentMap={documentMap}
       activeDocId={activeDoc?.id}
       onDocumentSelect={handleDocumentSelect}
       onCreateDocument={onCreateClick}

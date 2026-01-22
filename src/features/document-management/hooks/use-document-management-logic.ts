@@ -6,7 +6,7 @@ import { createDocument, deleteDocument, renameDocument } from '../services/docu
 
 export const useDocumentManagementLogic = () => {
   const { editor, collection } = useEditorContext();
-  const documents = useDocuments();
+  const { documents, documentMap, forceUpdate } = useDocuments();
   const [activeDoc, setActiveDoc] = useState<Doc | null>(editor.doc);
 
   // Sync activeDoc with editor.doc changes
@@ -48,14 +48,12 @@ export const useDocumentManagementLogic = () => {
 
   const handleRenameDocument = (docId: string, newTitle: string) => {
     renameDocument(collection, docId, newTitle);
-    // Force UI update
-    if ((window as any).__forceDocumentsUpdate) {
-      (window as any).__forceDocumentsUpdate();
-    }
+    forceUpdate();
   };
 
   return {
     documents,
+    documentMap,
     activeDoc,
     handleDocumentSelect,
     handleCreateDocument,

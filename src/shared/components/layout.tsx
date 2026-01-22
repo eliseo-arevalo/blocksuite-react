@@ -5,6 +5,7 @@ import { Sidebar } from './sidebar';
 interface LayoutProps {
   children: ReactNode;
   documents: any[];
+  documentMap: Map<string, any>;
   activeDocId?: string;
   onDocumentSelect: (doc: any) => void;
   onCreateDocument: (title?: string, parentId?: string) => void;
@@ -14,6 +15,7 @@ interface LayoutProps {
 export const Layout = ({ 
   children, 
   documents, 
+  documentMap,
   activeDocId, 
   onDocumentSelect,
   onCreateDocument,
@@ -40,6 +42,7 @@ export const Layout = ({
         <Sidebar
           isOpen={isSidebarOpen}
           documents={documents}
+          documentMap={documentMap}
           activeDocId={activeDocId}
           onDocumentSelect={onDocumentSelect}
           onCreateDocument={onCreateDocument}

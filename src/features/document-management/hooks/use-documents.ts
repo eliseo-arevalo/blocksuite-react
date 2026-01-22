@@ -1,20 +1,17 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Doc } from '@blocksuite/store';
 import { useEditorContext } from '@infrastructure/editor';
+import { useDocumentUpdate } from '@shared/contexts/document-update-context';
 
 export const useDocuments = () => {
   const { collection, editor } = useEditorContext();
   const [documents, setDocuments] = useState<Doc[]>([]);
-  const [updateTrigger, setUpdateTrigger] = useState(0);
-
-  const forceUpdate = useCallback(() => {
-    setUpdateTrigger(prev => prev + 1);
-  }, []);
+  const { forceUpdate } = useDocumentUpdate();
 
   const updateDocuments = useCallback(() => {
     const docs = [...collection.docs.values()].map(blocks => blocks.getDoc());
     setDocuments(docs);
-  }, [collection, updateTrigger]);
+  }, [collection]);
 
   useEffect(() => {
     updateDocuments();
@@ -27,8 +24,11 @@ export const useDocuments = () => {
     return () => disposables.forEach(d => d.dispose());
   }, [collection, editor, updateDocuments]);
 
-  // Expose forceUpdate for external use
-  (window as any).__forceDocumentsUpdate = forceUpdate;
+  // Create document map for O(1) lookups
+  const documentMap = useMemo(() => 
+    new Map(documents.map(doc => [doc.id, doc])), 
+    [documents]
+  );
 
-  return documents;
+  return { documents, documentMap, forceUpdate };
 };
