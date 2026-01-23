@@ -1,7 +1,6 @@
 import { Layout } from '@shared/components/layout';
 import { DocumentEditor } from '@features/document-editor/document-editor';
 import { useDocumentManagementLogic } from '@features/document-management/hooks/use-document-management-logic';
-import { MermaidDemo } from '@shared/components/mermaid-demo';
 
 export const AppContent = () => {
   const {
@@ -33,7 +32,7 @@ export const AppContent = () => {
       onCreateDocument={onCreateClick}
       onRenameDocument={handleRenameDocument}
     >
-      {activeDoc && documentMap.get(activeDoc.id)?.meta?.title === 'Mermaid Demo' ? <MermaidDemo /> : <DocumentEditor />}
+      <DocumentEditor />
     </Layout>
   );
 };
