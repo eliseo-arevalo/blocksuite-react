@@ -1,19 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
+import { Doc } from '@blocksuite/store';
 import { Icon } from '@shared/components/icon';
 import { useEditorContext } from '@infrastructure/editor';
-
-interface ExtendedDocMeta {
-  title?: string;
-  parentId?: string;
-}
-
-interface TreeNode {
-  id: string;
-  name: string;
-  type: 'folder' | 'document';
-  children?: TreeNode[];
-  isExpanded?: boolean;
-}
+import { ExtendedDocMeta, TreeNode } from '@shared/models/document.types';
 
 interface TreeItemProps {
   node: TreeNode;
@@ -95,10 +84,10 @@ const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: T
 
 interface SidebarProps {
   isOpen: boolean;
-  documents: any[];
-  documentMap: Map<string, any>;
+  documents: Doc[];
+  documentMap: Map<string, Doc>;
   activeDocId?: string;
-  onDocumentSelect: (doc: any) => void;
+  onDocumentSelect: (doc: Doc) => void;
   onCreateDocument: (title?: string, parentId?: string) => void;
 }
 

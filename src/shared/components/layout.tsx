@@ -1,13 +1,14 @@
 import { ReactNode, useState } from 'react';
+import { Doc } from '@blocksuite/store';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
 
 interface LayoutProps {
   children: ReactNode;
-  documents: any[];
-  documentMap: Map<string, any>;
+  documents: Doc[];
+  documentMap: Map<string, Doc>;
   activeDocId?: string;
-  onDocumentSelect: (doc: any) => void;
+  onDocumentSelect: (doc: Doc) => void;
   onCreateDocument: (title?: string, parentId?: string) => void;
   onRenameDocument: (docId: string, newTitle: string) => void;
 }

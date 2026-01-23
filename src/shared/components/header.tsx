@@ -1,19 +1,16 @@
+import { useMemo, useState, useRef, useEffect } from 'react';
+import { Doc } from '@blocksuite/store';
 import { Icon } from '@shared/components/icon';
 import { useTheme } from '@shared/contexts/theme-context';
-import { useMemo, useState, useRef, useEffect } from 'react';
 import { useEditorContext } from '@infrastructure/editor';
-
-interface ExtendedDocMeta {
-  title?: string;
-  parentId?: string;
-}
+import { ExtendedDocMeta } from '@shared/models/document.types';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
   isSidebarOpen: boolean;
-  documents: any[];
+  documents: Doc[];
   activeDocId?: string;
-  onDocumentSelect: (doc: any) => void;
+  onDocumentSelect: (doc: Doc) => void;
   onRenameDocument: (docId: string, newTitle: string) => void;
 }
 
