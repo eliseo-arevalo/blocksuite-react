@@ -1,4 +1,12 @@
-import { DocCollection } from '@blocksuite/store';
+import { DocCollection, Doc, type Text } from '@blocksuite/store';
+
+const syncTitleToEditor = (doc: Doc, newTitle: string) => {
+  const rootBlock = doc.root as unknown as { title?: Text } | null;
+  if (rootBlock?.title) {
+    rootBlock.title.clear();
+    rootBlock.title.insert(newTitle, 0);
+  }
+};
 
 export const createDocument = (collection: DocCollection, title?: string, parentId?: string) => {
   const doc = collection.createDoc();
@@ -12,6 +20,7 @@ export const createDocument = (collection: DocCollection, title?: string, parent
   const meta: any = {};
   if (title) {
     meta.title = title;
+    syncTitleToEditor(doc, title);
   }
   if (parentId) {
     meta.parentId = parentId;
@@ -50,6 +59,10 @@ export const deleteDocument = (collection: DocCollection, docId: string) => {
 };
 
 export const renameDocument = (collection: DocCollection, docId: string, newTitle: string) => {
-  const existingMeta = collection.meta.getDocMeta(docId) || {};
-  collection.setDocMeta(docId, { ...existingMeta, title: newTitle });
+  const doc = collection.getDoc(docId);
+  if (doc) {
+    const existingMeta = collection.meta.getDocMeta(docId) || {};
+    collection.setDocMeta(docId, { ...existingMeta, title: newTitle });
+    syncTitleToEditor(doc, newTitle);
+  }
 };
