@@ -21,31 +21,34 @@ const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: T
     <div className="tree-item">
       <div 
         className={`tree-item-content ${isSelected ? 'selected' : ''}`}
-        style={{ paddingLeft: `${level * 12 + 8}px` }}
         onClick={() => node.type === 'document' && onSelect(node.id)}
       >
-        <div className="tree-toggle">
+        <div 
+          className="tree-icon-container"
+          onClick={(e) => {
+            if (hasChildren) {
+              e.stopPropagation();
+              onToggle(node.id);
+            }
+          }}
+        >
+          <Icon 
+            name={hasChildren ? (node.isExpanded ? 'folderOpen' : 'folder') : 'document'}
+            size={16}
+            className="tree-item-icon"
+          />
           {hasChildren && (
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggle(node.id);
-              }}
-            >
-              <Icon 
-                name={node.isExpanded ? 'chevronDown' : 'chevronRight'} 
-                size={12} 
-              />
-            </button>
+            <Icon 
+              name={node.isExpanded ? 'chevronDown' : 'chevronRight'} 
+              size={14}
+              className="tree-toggle-icon"
+            />
           )}
         </div>
         
-        <Icon 
-          name="document"
-          size={14} 
-        />
-        
-        <span className="tree-item-name">{node.name}</span>
+        <span className="tree-item-name" title={node.name}>
+          {node.name}
+        </span>
         
         <div className="tree-actions">
           {onAddChild && (
@@ -55,7 +58,7 @@ const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: T
                 e.stopPropagation();
                 onAddChild(node.id);
               }}
-              title="Add child document"
+              title="Add child"
             >
               <Icon name="add" size={12} />
             </button>
@@ -185,17 +188,30 @@ export const Sidebar = ({
       </div>
       
       <div className="sidebar-content">
-        {treeData.map(node => (
-          <TreeItem
-            key={node.id}
-            node={node}
-            level={0}
-            onToggle={toggleNode}
-            onSelect={handleDocumentSelect}
-            onAddChild={handleAddChild}
-            selectedId={activeDocId}
-          />
-        ))}
+        {treeData.length === 0 ? (
+          <div className="empty-state">
+            <Icon name="document" size={32} />
+            <p>No documents yet</p>
+            <button 
+              className="empty-state-btn"
+              onClick={() => onCreateDocument()}
+            >
+              Create your first document
+            </button>
+          </div>
+        ) : (
+          treeData.map(node => (
+            <TreeItem
+              key={node.id}
+              node={node}
+              level={0}
+              onToggle={toggleNode}
+              onSelect={handleDocumentSelect}
+              onAddChild={handleAddChild}
+              selectedId={activeDocId}
+            />
+          ))
+        )}
       </div>
     </aside>
   );
