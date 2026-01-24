@@ -13,14 +13,8 @@ export const AppContent = () => {
   } = useDocumentManagementLogic();
 
   const onCreateClick = (title?: string, parentId?: string) => {
-    if (title) {
-      handleCreateDocument(title, parentId);
-    } else {
-      const newTitle = prompt('Enter document title:');
-      if (newTitle) {
-        handleCreateDocument(newTitle, parentId);
-      }
-    }
+    const documentTitle = title || 'New Page';
+    handleCreateDocument(documentTitle, parentId);
   };
 
   return (

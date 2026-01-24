@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './styles/app.css';
 import './styles/overrides.css';
-import { checkBrowserCompatibility } from '@shared/utils/browser-check';
-
-checkBrowserCompatibility();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

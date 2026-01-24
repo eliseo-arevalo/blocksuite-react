@@ -118,12 +118,9 @@ export const Sidebar = ({
   }, []);
 
   const handleAddChild = useCallback((parentId: string) => {
-    const title = prompt(`Enter child document title for ${parentId.slice(0, 8)}:`);
-    if (title && title.trim()) {
-      onCreateDocument(title.trim(), parentId);
-      // Auto-expand parent when child is created
-      setExpandedNodes(prev => new Set([...prev, parentId]));
-    }
+    onCreateDocument('New Page', parentId);
+    // Auto-expand parent when child is created
+    setExpandedNodes(prev => new Set([...prev, parentId]));
   }, [onCreateDocument]);
 
   const handleDocumentSelect = useCallback((docId: string) => {

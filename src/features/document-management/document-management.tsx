@@ -1,5 +1,6 @@
 import { useDocumentManagementLogic } from './hooks/use-document-management-logic';
 import { DocumentList } from './components/document-list';
+import { useModalContext } from '@shared/providers/modal-provider';
 
 export const DocumentManagement = () => {
   const {
@@ -10,18 +11,17 @@ export const DocumentManagement = () => {
     handleDeleteDocument,
     handleRenameDocument,
   } = useDocumentManagementLogic();
+  
+  const { alert } = useModalContext();
 
   const onCreateClick = () => {
-    const title = prompt('Enter document title:');
-    if (title) {
-      handleCreateDocument(title);
-    }
+    handleCreateDocument('New Page');
   };
 
-  const onDeleteClick = (docId: string) => {
+  const onDeleteClick = async (docId: string) => {
     const result = handleDeleteDocument(docId);
-    if (!result.success) {
-      alert(result.error);
+    if (!result.success && result.error) {
+      await alert(result.error);
     }
   };
 

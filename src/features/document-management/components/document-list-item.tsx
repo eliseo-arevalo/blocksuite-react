@@ -1,4 +1,5 @@
 import { Doc } from '@blocksuite/store';
+import { useModalContext } from '@shared/providers/modal-provider';
 
 interface DocumentListItemProps {
   doc: Doc;
@@ -9,16 +10,19 @@ interface DocumentListItemProps {
 }
 
 export const DocumentListItem = ({ doc, isActive, onClick, onDelete, onRename }: DocumentListItemProps) => {
-  const handleRename = () => {
-    const newTitle = prompt('Enter new title:', doc.meta?.title || 'Untitled');
+  const { prompt, confirm } = useModalContext();
+  
+  const handleRename = async () => {
+    const newTitle = await prompt('Enter new title:', doc.meta?.title || 'Untitled');
     if (newTitle && newTitle.trim()) {
       onRename(newTitle.trim());
     }
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm(`Delete "${doc.meta?.title || 'Untitled'}"?`)) {
+    const confirmed = await confirm(`Delete "${doc.meta?.title || 'Untitled'}"?`);
+    if (confirmed) {
       onDelete();
     }
   };
