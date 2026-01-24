@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react';
 import { Doc } from '@blocksuite/store';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
+import { useEditorWidth } from '@shared/contexts/editor-width-context';
 
 interface LayoutProps {
   children: ReactNode;
@@ -23,6 +24,7 @@ export const Layout = ({
   onRenameDocument 
 }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { widthMode } = useEditorWidth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
@@ -49,7 +51,7 @@ export const Layout = ({
           onCreateDocument={onCreateDocument}
         />
         
-        <main className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''}`}>
+        <main className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''} ${widthMode === 'full' ? 'content-full-width' : ''}`}>
           {children}
         </main>
       </div>

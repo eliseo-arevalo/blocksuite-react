@@ -381,6 +381,11 @@ body {
   margin-left: 0;
 }
 
+/* Full width content mode */
+.main-content.content-full-width {
+  /* Remove any constraints when in full width mode */
+}
+
 /* Document Editor */
 .document-editor {
   height: 100%;
@@ -764,11 +769,65 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-/* ===== EDITOR CORE FIXES ===== */
-
+/* Editor Width Modes - Notion Style */
 .editor-canvas {
   width: 100%;
   height: 100%;
+  transition: all 0.2s ease;
+}
+
+/* Page Width Mode (Default) - Like Notion */
+.editor-page-width {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 96px;
+}
+
+/* Full Width Mode - Uses ALL available space */
+.editor-full-width {
+  max-width: none;
+  padding: 40px 0;  /* Sin padding lateral - TODO el ancho */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .editor-page-width {
+    padding: 40px 64px;
+  }
+  
+  .editor-full-width {
+    padding: 40px 0;  /* Sin padding lateral en tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-page-width {
+    padding: 20px 24px;
+  }
+  
+  .editor-full-width {
+    padding: 20px 0;  /* Sin padding lateral en móviles */
+  }
+}
+
+/* Width Toggle Button */
+.width-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.width-toggle:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 /* Modal styles */

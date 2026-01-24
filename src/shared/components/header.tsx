@@ -4,6 +4,7 @@ import { Icon } from '@shared/components/icon';
 import { useTheme } from '@shared/contexts/theme-context';
 import { useEditorContext } from '@infrastructure/editor';
 import { ExtendedDocMeta } from '@shared/models/document.types';
+import { WidthToggle } from '@shared/components/width-toggle';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -134,6 +135,7 @@ export const Header = ({
       </div>
       
       <div className="header-right">
+        <WidthToggle />
         <button 
           className="theme-toggle"
           onClick={toggleTheme}
