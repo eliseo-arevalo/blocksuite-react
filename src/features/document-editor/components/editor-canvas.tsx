@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useEditorContext } from '@infrastructure/editor';
-import { useEditorWidth } from '@shared/contexts/editor-width-context';
+import { useEditorConfig } from '@shared/contexts/editor-config-context';
+import { EditorSettings } from '@shared/components/editor-settings';
 
 export const EditorCanvas = () => {
   const { editor } = useEditorContext();
-  const { widthMode } = useEditorWidth();
+  const { widthMode, fontFamily } = useEditorConfig();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,9 +15,12 @@ export const EditorCanvas = () => {
   }, []);
 
   return (
-    <div 
-      className={`editor-canvas ${widthMode === 'full' ? 'editor-full-width' : 'editor-page-width'}`} 
-      ref={containerRef} 
-    />
+    <div className="editor-container">
+      <EditorSettings />
+      <div 
+        className={`editor-canvas ${widthMode === 'full' ? 'editor-full-width' : 'editor-page-width'} font-${fontFamily}`} 
+        ref={containerRef} 
+      />
+    </div>
   );
 };

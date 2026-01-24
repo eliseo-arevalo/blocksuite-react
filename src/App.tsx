@@ -2,7 +2,7 @@ import { EditorProvider } from '@infrastructure/editor';
 import { ThemeProvider } from '@shared/contexts/theme-provider';
 import { DocumentUpdateProvider } from '@shared/contexts/document-update-context';
 import { ModalProvider } from '@shared/providers/modal-provider';
-import { EditorWidthProvider } from '@shared/contexts/editor-width-context';
+import { EditorConfigProvider } from '@shared/contexts/editor-config-context';
 import { BrowserCompatibilityChecker } from '@shared/components/browser-compatibility-checker';
 import { AppContent } from '@shared/components/app-content';
 
@@ -11,12 +11,12 @@ function App() {
     <ThemeProvider>
       <EditorProvider>
         <DocumentUpdateProvider>
-          <EditorWidthProvider>
+          <EditorConfigProvider>
             <ModalProvider>
               <BrowserCompatibilityChecker />
               <AppContent />
             </ModalProvider>
-          </EditorWidthProvider>
+          </EditorConfigProvider>
         </DocumentUpdateProvider>
       </EditorProvider>
     </ThemeProvider>

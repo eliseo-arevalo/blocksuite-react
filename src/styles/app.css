@@ -769,7 +769,88 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-/* Editor Width Modes - Notion Style */
+/* Editor Container */
+.editor-container {
+  position: relative;
+  height: 100%;
+}
+
+/* Editor Settings - 3 dots menu */
+.editor-settings {
+  position: absolute;
+  top: 20px;
+  right: 20px;  /* Esquina superior derecha */
+  z-index: 10;
+}
+
+.editor-settings-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+.editor-settings-trigger:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.editor-settings-menu {
+  position: absolute;
+  top: 36px;
+  right: 0;  /* Alineado a la derecha */
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px var(--shadow);
+  min-width: 180px;
+  z-index: 20;
+}
+
+.editor-settings-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.15s ease;
+}
+
+.editor-settings-menu button:hover {
+  background: var(--bg-secondary);
+}
+
+.editor-settings-menu button.active {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.editor-settings-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 4px;
+}
+
+.editor-settings-label {
+  display: block;
+  padding: 6px 12px 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 .editor-canvas {
   width: 100%;
   height: 100%;
@@ -810,25 +891,23 @@ body {
   }
 }
 
-/* Width Toggle Button */
-.width-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* Font Family Options - Apply to BlockSuite content */
+.font-system,
+.font-system * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
 }
 
-.width-toggle:hover {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
+.font-serif,
+.font-serif * {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
 }
+
+.font-mono,
+.font-mono * {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+}
+
+/* Editor Width Modes - Notion Style */
 
 /* Modal styles */
 .modal-overlay {
