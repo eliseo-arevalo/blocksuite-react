@@ -14,6 +14,18 @@ export const useDocumentManagementLogic = () => {
     setActiveDoc(editor.doc);
   }, [editor.doc]);
 
+  // Navigate to document when a link is clicked in the editor
+  useEffect(() => {
+    const disposable = editor.slots.docLinkClicked.on(({ docId }) => {
+      const targetDoc = collection.getDoc(docId);
+      if (targetDoc) {
+        editor.doc = targetDoc;
+        setActiveDoc(targetDoc);
+      }
+    });
+    return () => disposable.dispose();
+  }, [editor, collection]);
+
   const handleDocumentSelect = (doc: Doc) => {
     editor.doc = doc;
     setActiveDoc(doc);

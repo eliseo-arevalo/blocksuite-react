@@ -4,7 +4,7 @@ import { useEditorContext } from '@infrastructure/editor';
 import { useDocumentUpdate } from '@shared/contexts/document-update-context';
 
 export const useDocuments = () => {
-  const { collection, editor } = useEditorContext();
+  const { collection } = useEditorContext();
   const [documents, setDocuments] = useState<Doc[]>([]);
   const { forceUpdate } = useDocumentUpdate();
 
@@ -18,11 +18,10 @@ export const useDocuments = () => {
 
     const disposables = [
       collection.slots.docUpdated.on(updateDocuments),
-      editor.slots.docLinkClicked.on(updateDocuments),
     ];
 
     return () => disposables.forEach(d => d.dispose());
-  }, [collection, editor, updateDocuments]);
+  }, [collection, updateDocuments]);
 
   // Create document map for O(1) lookups
   const documentMap = useMemo(() => 
