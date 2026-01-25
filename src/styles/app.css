@@ -553,6 +553,10 @@ body {
   position: relative;
 }
 
+.tree-icon-container.has-children {
+  cursor: pointer;
+}
+
 .tree-item-icon {
   color: var(--text-secondary);
   transition: all 0.15s ease;
@@ -580,11 +584,11 @@ body {
   padding: 1px;
 }
 
-.tree-item-content:hover .tree-toggle-icon {
+.tree-icon-container.has-children:hover .tree-toggle-icon {
   opacity: 1;
 }
 
-.tree-item-content:hover .tree-item-icon {
+.tree-icon-container.has-children:hover .tree-item-icon {
   opacity: 0;
 }
 
@@ -626,6 +630,44 @@ body {
 
 .tree-children {
   margin-left: 20px;
+}
+
+/* Drag & Drop */
+.tree-item-content[draggable="true"] {
+  cursor: move;
+}
+
+.tree-item-content.drag-over {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.tree-item-content.drag-over .tree-item-icon,
+.tree-item-content.drag-over .tree-item-name {
+  color: var(--bg-primary);
+}
+
+/* Root Drop Zone */
+.root-drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 8px 8px;
+  padding: 12px;
+  border: 2px dashed var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: all 0.15s;
+  opacity: 0.5;
+}
+
+.root-drop-zone.active {
+  border-color: var(--accent-primary);
+  background: var(--tree-hover);
+  color: var(--text-primary);
+  opacity: 1;
 }
 
 /* Empty State */
@@ -994,13 +1036,15 @@ body {
 
 .toast-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10000;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
-  max-width: 400px;
+  max-width: 500px;
   pointer-events: none;
 }
 
@@ -1025,20 +1069,22 @@ body {
 
 @keyframes toast-slide-in {
   from {
-    transform: translateX(100%);
+    transform: translateY(-20px);
     opacity: 0;
   }
   to {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
 }
 
 @keyframes toast-slide-out {
   from {
+    transform: translateY(0);
     opacity: 1;
   }
   to {
+    transform: translateY(-10px);
     opacity: 0;
   }
 }
@@ -1096,14 +1142,16 @@ body {
 /* Mobile responsive */
 @media (max-width: 768px) {
   .toast-container {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-    max-width: none;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 400px;
   }
 
   .toast {
     min-width: auto;
     max-width: none;
+    width: 100%;
   }
 }

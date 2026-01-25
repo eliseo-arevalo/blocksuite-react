@@ -10,8 +10,9 @@ interface LayoutProps {
   documentMap: Map<string, Doc>;
   activeDocId?: string;
   onDocumentSelect: (doc: Doc) => void;
-  onCreateDocument: (title?: string, parentId?: string) => void;
+  onCreateDocument: (title?: string, parentId?: string) => Doc | null;
   onRenameDocument: (docId: string, newTitle: string) => void;
+  onDocumentMove: (docId: string, newParentId: string | null) => void;
 }
 
 export const Layout = ({
@@ -22,6 +23,7 @@ export const Layout = ({
   onDocumentSelect,
   onCreateDocument,
   onRenameDocument,
+  onDocumentMove,
 }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { widthMode } = useEditorConfig();
@@ -49,6 +51,7 @@ export const Layout = ({
           activeDocId={activeDocId}
           onDocumentSelect={onDocumentSelect}
           onCreateDocument={onCreateDocument}
+          onDocumentMove={onDocumentMove}
         />
 
         <main

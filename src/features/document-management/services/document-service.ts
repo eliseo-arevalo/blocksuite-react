@@ -1,5 +1,7 @@
 import { Doc, DocCollection, type Text } from '@blocksuite/store';
 
+const MAX_DEPTH = 4;
+
 const syncTitleToEditor = (doc: Doc, newTitle: string) => {
   const rootBlock = doc.root as unknown as { title?: Text } | null;
   if (rootBlock?.title) {
@@ -8,7 +10,27 @@ const syncTitleToEditor = (doc: Doc, newTitle: string) => {
   }
 };
 
+const getDepth = (collection: DocCollection, docId: string): number => {
+  let depth = 0;
+  let currentId: string | null = docId;
+
+  while (currentId) {
+    const meta = collection.meta.getDocMeta(currentId) as { parentId?: string } | null;
+    currentId = meta?.parentId || null;
+    if (currentId) depth++;
+  }
+
+  return depth;
+};
+
 export const createDocument = (collection: DocCollection, title?: string, parentId?: string) => {
+  // Check depth limit if creating as child
+  if (parentId) {
+    const parentDepth = getDepth(collection, parentId);
+    if (parentDepth >= MAX_DEPTH) {
+      return null;
+    }
+  }
   const doc = collection.createDoc();
   doc.load(() => {
     const pageBlockId = doc.addBlock('affine:page', {});

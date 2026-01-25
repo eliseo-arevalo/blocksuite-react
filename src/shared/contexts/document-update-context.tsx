@@ -2,19 +2,20 @@ import { createContext, ReactNode, useCallback, useContext, useState } from 'rea
 
 interface DocumentUpdateContextType {
   forceUpdate: () => void;
+  updateTrigger: number;
 }
 
 const DocumentUpdateContext = createContext<DocumentUpdateContextType | null>(null);
 
 export const DocumentUpdateProvider = ({ children }: { children: ReactNode }) => {
-  const [, setTrigger] = useState(0);
+  const [updateTrigger, setTrigger] = useState(0);
 
   const forceUpdate = useCallback(() => {
     setTrigger((prev) => prev + 1);
   }, []);
 
   return (
-    <DocumentUpdateContext.Provider value={{ forceUpdate }}>
+    <DocumentUpdateContext.Provider value={{ forceUpdate, updateTrigger }}>
       {children}
     </DocumentUpdateContext.Provider>
   );

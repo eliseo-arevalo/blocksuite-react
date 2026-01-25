@@ -2,6 +2,7 @@ import { Doc } from '@blocksuite/store';
 import { useEditorContext } from '@infrastructure/editor';
 import { useToastContext } from '@shared/providers/toast-provider';
 import { useEffect, useState } from 'react';
+import { moveDocument } from '../services/document-move-service';
 import { createDocument, deleteDocument, renameDocument } from '../services/document-service';
 import { useDocuments } from './use-documents';
 
@@ -36,6 +37,10 @@ export const useDocumentManagementLogic = () => {
   const handleCreateDocument = (title: string, parentId?: string) => {
     if (title && title.trim()) {
       const newDoc = createDocument(collection, title.trim(), parentId);
+      if (!newDoc) {
+        toast.error('Cannot create: maximum nesting depth (4 levels) reached');
+        return null;
+      }
       editor.doc = newDoc;
       setActiveDoc(newDoc);
       toast.success(`Document "${title.trim()}" created successfully`);
@@ -71,6 +76,24 @@ export const useDocumentManagementLogic = () => {
     toast.info(`Document renamed to "${newTitle}"`);
   };
 
+  const handleMoveDocument = (docId: string, newParentId: string | null) => {
+    const success = moveDocument(collection, docId, newParentId);
+
+    if (success) {
+      forceUpdate();
+
+      const docTitle = documentMap.get(docId)?.title || 'Document';
+      if (newParentId) {
+        const parentTitle = documentMap.get(newParentId)?.title || 'Document';
+        toast.success(`"${docTitle}" moved into "${parentTitle}"`);
+      } else {
+        toast.success(`"${docTitle}" moved to root`);
+      }
+    } else {
+      toast.error('Cannot move: maximum nesting depth (4 levels) or circular reference');
+    }
+  };
+
   return {
     documents,
     documentMap,
@@ -79,5 +102,6 @@ export const useDocumentManagementLogic = () => {
     handleCreateDocument,
     handleDeleteDocument,
     handleRenameDocument,
+    handleMoveDocument,
   };
 };

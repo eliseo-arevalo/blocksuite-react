@@ -10,11 +10,12 @@ export const AppContent = () => {
     handleDocumentSelect,
     handleCreateDocument,
     handleRenameDocument,
+    handleMoveDocument,
   } = useDocumentManagementLogic();
 
   const onCreateClick = (title?: string, parentId?: string) => {
     const documentTitle = title || 'New Page';
-    handleCreateDocument(documentTitle, parentId);
+    return handleCreateDocument(documentTitle, parentId);
   };
 
   return (
@@ -25,6 +26,7 @@ export const AppContent = () => {
       onDocumentSelect={handleDocumentSelect}
       onCreateDocument={onCreateClick}
       onRenameDocument={handleRenameDocument}
+      onDocumentMove={handleMoveDocument}
     >
       <DocumentEditor />
     </Layout>
