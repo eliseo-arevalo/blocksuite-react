@@ -65,15 +65,24 @@ export const useDocumentManagementLogic = () => {
       }
     }
 
-    deleteDocument(collection, docId);
-    toast.success(`"${docTitle}" deleted successfully`);
-    return { success: true };
+    const success = deleteDocument(collection, docId);
+    if (success) {
+      toast.success(`"${docTitle}" deleted successfully`);
+      return { success: true };
+    } else {
+      toast.error('Failed to delete document');
+      return { success: false, error: 'Failed to delete document' };
+    }
   };
 
   const handleRenameDocument = (docId: string, newTitle: string) => {
-    renameDocument(collection, docId, newTitle);
-    forceUpdate();
-    toast.info(`Document renamed to "${newTitle}"`);
+    const success = renameDocument(collection, docId, newTitle);
+    if (success) {
+      forceUpdate();
+      toast.info(`Document renamed to "${newTitle}"`);
+    } else {
+      toast.error('Failed to rename document: invalid title or document not found');
+    }
   };
 
   const handleMoveDocument = (docId: string, newParentId: string | null) => {

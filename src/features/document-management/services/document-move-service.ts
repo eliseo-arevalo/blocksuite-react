@@ -1,4 +1,5 @@
 import { DocCollection } from '@blocksuite/store';
+import { isValidDocId, isValidParentId } from '@shared/utils/validation';
 
 /**
  * Moves a document to a new parent or to root level
@@ -10,32 +11,61 @@ export const moveDocument = (
   docId: string,
   newParentId: string | null
 ) => {
-  const doc = collection.getDoc(docId);
-  if (!doc) return false;
-
-  const existingMeta = (collection.meta.getDocMeta(docId) || {}) as Record<string, unknown>;
-
-  // Prevent circular reference
-  if (newParentId && isDescendant(collection, newParentId, docId)) {
-    return false;
-  }
-
-  // Check depth limit
-  if (newParentId) {
-    const depth = getDepth(collection, newParentId);
-    if (depth >= MAX_DEPTH) {
+  try {
+    // Validate docId
+    if (!isValidDocId(docId)) {
+      console.error('Invalid document ID provided');
       return false;
     }
-  }
 
-  // Update parent
-  if (newParentId) {
-    collection.setDocMeta(docId, { ...existingMeta, parentId: newParentId });
-  } else {
-    collection.setDocMeta(docId, { ...existingMeta, parentId: undefined });
-  }
+    // Validate newParentId
+    if (!isValidParentId(newParentId)) {
+      console.error('Invalid parent ID provided');
+      return false;
+    }
 
-  return true;
+    // Check if document exists
+    const doc = collection.getDoc(docId);
+    if (!doc) {
+      console.error('Document does not exist');
+      return false;
+    }
+
+    // Check if new parent exists (if provided)
+    if (newParentId && !collection.getDoc(newParentId)) {
+      console.error('Parent document does not exist');
+      return false;
+    }
+
+    const existingMeta = (collection.meta.getDocMeta(docId) || {}) as Record<string, unknown>;
+
+    // Prevent circular reference
+    if (newParentId && isDescendant(collection, newParentId, docId)) {
+      console.error('Cannot move document into its own descendant');
+      return false;
+    }
+
+    // Check depth limit
+    if (newParentId) {
+      const depth = getDepth(collection, newParentId);
+      if (depth >= MAX_DEPTH) {
+        console.error('Maximum nesting depth reached');
+        return false;
+      }
+    }
+
+    // Update parent
+    if (newParentId) {
+      collection.setDocMeta(docId, { ...existingMeta, parentId: newParentId });
+    } else {
+      collection.setDocMeta(docId, { ...existingMeta, parentId: undefined });
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Failed to move document:', error);
+    return false;
+  }
 };
 
 /**
