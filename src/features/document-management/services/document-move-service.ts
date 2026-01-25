@@ -56,9 +56,9 @@ export const moveDocument = (
 
     // Update parent
     if (newParentId) {
-      collection.setDocMeta(docId, { ...existingMeta, parentId: newParentId });
+      collection.setDocMeta(docId, { ...existingMeta, parentId: newParentId } as any);
     } else {
-      collection.setDocMeta(docId, { ...existingMeta, parentId: undefined });
+      collection.setDocMeta(docId, { ...existingMeta, parentId: undefined } as any);
     }
 
     return true;

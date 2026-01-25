@@ -1,7 +1,8 @@
 import { Doc } from '@blocksuite/store';
 import { useEditorContext } from '@infrastructure/editor';
 import { useToastContext } from '@shared/providers/toast-provider';
-import { useEffect, useState } from 'react';
+import { sanitizeHtml } from '@shared/utils/sanitize';
+import { useEffect } from 'react';
 import { moveDocument } from '../services/document-move-service';
 import { createDocument, deleteDocument, renameDocument } from '../services/document-service';
 import { useDocuments } from './use-documents';
@@ -10,12 +11,6 @@ export const useDocumentManagementLogic = () => {
   const { editor, collection } = useEditorContext();
   const { documents, documentMap, forceUpdate } = useDocuments();
   const toast = useToastContext();
-  const [activeDoc, setActiveDoc] = useState<Doc | null>(editor.doc);
-
-  // Sync activeDoc with editor.doc changes
-  useEffect(() => {
-    setActiveDoc(editor.doc);
-  }, [editor.doc]);
 
   // Navigate to document when a link is clicked in the editor
   useEffect(() => {
@@ -23,7 +18,6 @@ export const useDocumentManagementLogic = () => {
       const targetDoc = collection.getDoc(docId);
       if (targetDoc) {
         editor.doc = targetDoc;
-        setActiveDoc(targetDoc);
       }
     });
     return () => disposable.dispose();
@@ -31,7 +25,6 @@ export const useDocumentManagementLogic = () => {
 
   const handleDocumentSelect = (doc: Doc) => {
     editor.doc = doc;
-    setActiveDoc(doc);
   };
 
   const handleCreateDocument = (title: string, parentId?: string) => {
@@ -42,7 +35,6 @@ export const useDocumentManagementLogic = () => {
         return null;
       }
       editor.doc = newDoc;
-      setActiveDoc(newDoc);
       toast.success(`Document "${title.trim()}" created successfully`);
       return newDoc;
     }
@@ -55,13 +47,14 @@ export const useDocumentManagementLogic = () => {
       return { success: false, error: 'Cannot delete the last document' };
     }
 
-    const docTitle = documentMap.get(docId)?.title || 'Document';
+    const meta = collection.meta.getDocMeta(docId) as { title?: string } | null;
+    const rawTitle = meta?.title || 'Document';
+    const docTitle = sanitizeHtml(rawTitle);
 
-    if (activeDoc?.id === docId) {
+    if (editor.doc?.id === docId) {
       const nextDoc = documents.find((d) => d.id !== docId);
       if (nextDoc) {
         editor.doc = nextDoc;
-        setActiveDoc(nextDoc);
       }
     }
 
@@ -91,9 +84,13 @@ export const useDocumentManagementLogic = () => {
     if (success) {
       forceUpdate();
 
-      const docTitle = documentMap.get(docId)?.title || 'Document';
+      const docMeta = collection.meta.getDocMeta(docId) as { title?: string } | null;
+      const rawDocTitle = docMeta?.title || 'Document';
+      const docTitle = sanitizeHtml(rawDocTitle);
       if (newParentId) {
-        const parentTitle = documentMap.get(newParentId)?.title || 'Document';
+        const parentMeta = collection.meta.getDocMeta(newParentId) as { title?: string } | null;
+        const rawParentTitle = parentMeta?.title || 'Document';
+        const parentTitle = sanitizeHtml(rawParentTitle);
         toast.success(`"${docTitle}" moved into "${parentTitle}"`);
       } else {
         toast.success(`"${docTitle}" moved to root`);
@@ -106,7 +103,7 @@ export const useDocumentManagementLogic = () => {
   return {
     documents,
     documentMap,
-    activeDoc,
+    activeDoc: editor.doc,
     handleDocumentSelect,
     handleCreateDocument,
     handleDeleteDocument,

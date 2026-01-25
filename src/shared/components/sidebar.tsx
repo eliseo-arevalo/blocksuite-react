@@ -2,6 +2,7 @@ import { Doc } from '@blocksuite/store';
 import { useEditorContext } from '@infrastructure/editor';
 import { Icon } from '@shared/components/icon';
 import { ExtendedDocMeta, TreeNode } from '@shared/models/document.types';
+import { sanitizeHtml } from '@shared/utils/sanitize';
 import { useCallback, useMemo, useState } from 'react';
 
 interface TreeItemProps {
@@ -228,9 +229,10 @@ export const Sidebar = ({
     // First pass: create all nodes
     documents.forEach((doc) => {
       const meta = collection.meta.getDocMeta(doc.id) as ExtendedDocMeta;
+      const rawTitle = meta?.title || `Document ${doc.id.slice(0, 8)}`;
       const node: TreeNode = {
         id: doc.id,
-        name: meta?.title || `Document ${doc.id.slice(0, 8)}`,
+        name: sanitizeHtml(rawTitle),
         type: 'document',
         isExpanded: expandedNodes.has(doc.id),
         children: [],
