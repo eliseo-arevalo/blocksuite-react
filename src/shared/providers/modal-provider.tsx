@@ -1,6 +1,6 @@
-import { createContext, useContext, ReactNode } from 'react';
-import { useModal } from '@shared/hooks/use-modal';
 import { Modal } from '@shared/components/modal';
+import { useModal } from '@shared/hooks/use-modal';
+import { createContext, ReactNode, useContext } from 'react';
 
 interface ModalContextType {
   alert: (message: string, title?: string) => Promise<void>;

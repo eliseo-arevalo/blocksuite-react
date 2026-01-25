@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
 import { useEditorContext } from '@infrastructure/editor';
-import { useEditorConfig } from '@shared/contexts/editor-config-context';
 import { EditorSettings } from '@shared/components/editor-settings';
+import { useEditorConfig } from '@shared/contexts/editor-config-context';
+import { useEffect, useRef } from 'react';
 
 export const EditorCanvas = () => {
   const { editor } = useEditorContext();
@@ -12,14 +12,14 @@ export const EditorCanvas = () => {
     if (containerRef.current && editor) {
       containerRef.current.appendChild(editor);
     }
-  }, []);
+  }, [editor]);
 
   return (
     <div className="editor-container">
       <EditorSettings />
-      <div 
-        className={`editor-canvas ${widthMode === 'full' ? 'editor-full-width' : 'editor-page-width'} font-${fontFamily}`} 
-        ref={containerRef} 
+      <div
+        className={`editor-canvas ${widthMode === 'full' ? 'editor-full-width' : 'editor-page-width'} font-${fontFamily}`}
+        ref={containerRef}
       />
     </div>
   );

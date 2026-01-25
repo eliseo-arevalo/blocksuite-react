@@ -9,16 +9,16 @@ interface DocumentListProps {
   onDocumentRename: (docId: string, newTitle: string) => void;
 }
 
-export const DocumentList = ({ 
-  documents, 
-  activeDoc, 
+export const DocumentList = ({
+  documents,
+  activeDoc,
   onDocumentSelect,
   onDocumentDelete,
-  onDocumentRename
+  onDocumentRename,
 }: DocumentListProps) => {
   return (
     <div className="doc-list">
-      {documents.map(doc => (
+      {documents.map((doc) => (
         <DocumentListItem
           key={doc.id}
           doc={doc}

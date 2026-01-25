@@ -1,8 +1,8 @@
-import { ReactNode, useState } from 'react';
 import { Doc } from '@blocksuite/store';
+import { useEditorConfig } from '@shared/contexts/editor-config-context';
+import { ReactNode, useState } from 'react';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
-import { useEditorConfig } from '@shared/contexts/editor-config-context';
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,25 +14,25 @@ interface LayoutProps {
   onRenameDocument: (docId: string, newTitle: string) => void;
 }
 
-export const Layout = ({ 
-  children, 
-  documents, 
+export const Layout = ({
+  children,
+  documents,
   documentMap,
-  activeDocId, 
+  activeDocId,
   onDocumentSelect,
   onCreateDocument,
-  onRenameDocument 
+  onRenameDocument,
 }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { widthMode } = useEditorConfig();
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   return (
     <div className="layout">
-      <Header 
+      <Header
         onToggleSidebar={toggleSidebar}
         isSidebarOpen={isSidebarOpen}
         documents={documents}
@@ -40,7 +40,7 @@ export const Layout = ({
         onDocumentSelect={onDocumentSelect}
         onRenameDocument={onRenameDocument}
       />
-      
+
       <div className="layout-body">
         <Sidebar
           isOpen={isSidebarOpen}
@@ -50,8 +50,10 @@ export const Layout = ({
           onDocumentSelect={onDocumentSelect}
           onCreateDocument={onCreateDocument}
         />
-        
-        <main className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''} ${widthMode === 'full' ? 'content-full-width' : ''}`}>
+
+        <main
+          className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''} ${widthMode === 'full' ? 'content-full-width' : ''}`}
+        >
           {children}
         </main>
       </div>

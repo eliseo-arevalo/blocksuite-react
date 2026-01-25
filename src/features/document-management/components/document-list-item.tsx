@@ -9,9 +9,15 @@ interface DocumentListItemProps {
   onRename: (newTitle: string) => void;
 }
 
-export const DocumentListItem = ({ doc, isActive, onClick, onDelete, onRename }: DocumentListItemProps) => {
+export const DocumentListItem = ({
+  doc,
+  isActive,
+  onClick,
+  onDelete,
+  onRename,
+}: DocumentListItemProps) => {
   const { prompt, confirm } = useModalContext();
-  
+
   const handleRename = async () => {
     const newTitle = await prompt('Enter new title:', doc.meta?.title || 'Untitled');
     if (newTitle && newTitle.trim()) {
@@ -31,7 +37,14 @@ export const DocumentListItem = ({ doc, isActive, onClick, onDelete, onRename }:
     <div className={`doc-item ${isActive ? 'active' : ''}`} onClick={onClick}>
       <span className="doc-title">{doc.meta?.title || 'Untitled'}</span>
       <div className="doc-actions">
-        <button onClick={(e) => { e.stopPropagation(); handleRename(); }}>✏️</button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRename();
+          }}
+        >
+          ✏️
+        </button>
         <button onClick={handleDelete}>🗑️</button>
       </div>
     </div>

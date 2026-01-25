@@ -1,4 +1,4 @@
-import { DocCollection, Doc, type Text } from '@blocksuite/store';
+import { Doc, DocCollection, type Text } from '@blocksuite/store';
 
 const syncTitleToEditor = (doc: Doc, newTitle: string) => {
   const rootBlock = doc.root as unknown as { title?: Text } | null;
@@ -16,8 +16,8 @@ export const createDocument = (collection: DocCollection, title?: string, parent
     const noteId = doc.addBlock('affine:note', {}, pageBlockId);
     doc.addBlock('affine:paragraph', {}, noteId);
   });
-  
-  const meta: any = {};
+
+  const meta: Record<string, unknown> = {};
   if (title) {
     meta.title = title;
     syncTitleToEditor(doc, title);
@@ -25,7 +25,7 @@ export const createDocument = (collection: DocCollection, title?: string, parent
   if (parentId) {
     meta.parentId = parentId;
   }
-  
+
   if (Object.keys(meta).length > 0) {
     collection.setDocMeta(doc.id, meta);
   }
@@ -50,7 +50,7 @@ export const createDocument = (collection: DocCollection, title?: string, parent
       }
     }
   });
-  
+
   return doc;
 };
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 export type FontFamily = 'system' | 'serif' | 'mono';
 
@@ -16,16 +16,18 @@ export const EditorConfigProvider = ({ children }: { children: ReactNode }) => {
   const [fontFamily, setFontFamily] = useState<FontFamily>('system');
 
   const toggleWidthMode = () => {
-    setWidthMode(prev => prev === 'page' ? 'full' : 'page');
+    setWidthMode((prev) => (prev === 'page' ? 'full' : 'page'));
   };
 
   return (
-    <EditorConfigContext.Provider value={{
-      widthMode,
-      fontFamily,
-      toggleWidthMode,
-      setFontFamily
-    }}>
+    <EditorConfigContext.Provider
+      value={{
+        widthMode,
+        fontFamily,
+        toggleWidthMode,
+        setFontFamily,
+      }}
+    >
       {children}
     </EditorConfigContext.Provider>
   );

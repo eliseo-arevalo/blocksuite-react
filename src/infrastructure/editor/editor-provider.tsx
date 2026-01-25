@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { createEditorInstance } from './editor-factory';
 import { EditorContext } from './editor-context';
+import { createEditorInstance } from './editor-factory';
 
 export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   /**
@@ -10,9 +10,5 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
    */
   const editorInstance = useMemo(() => createEditorInstance(), []);
 
-  return (
-    <EditorContext.Provider value={editorInstance}>
-      {children}
-    </EditorContext.Provider>
-  );
+  return <EditorContext.Provider value={editorInstance}>{children}</EditorContext.Provider>;
 };

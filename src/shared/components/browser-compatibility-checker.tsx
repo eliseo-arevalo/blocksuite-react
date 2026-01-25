@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
 import { useModalContext } from '@shared/providers/modal-provider';
+import { useEffect, useRef } from 'react';
 
 const MIN_CHROME = 73;
 const MIN_EDGE = 79;
@@ -19,7 +19,7 @@ export function BrowserCompatibilityChecker() {
 
     const checkBrowser = async () => {
       const ua = navigator.userAgent;
-      
+
       // Firefox warning
       if (ua.includes('Firefox')) {
         await alert('⚠️ Firefox puede presentar problemas.\nRecomendamos Chrome o Edge.');
@@ -27,10 +27,10 @@ export function BrowserCompatibilityChecker() {
         // Version checks
         const checks = [
           [/Chrome\/(\d+)/, MIN_CHROME, 'Chrome'],
-          [/Edg\/(\d+)/, MIN_EDGE, 'Edge'], 
-          [/Version\/(\d+).*Safari/, MIN_SAFARI, 'Safari']
+          [/Edg\/(\d+)/, MIN_EDGE, 'Edge'],
+          [/Version\/(\d+).*Safari/, MIN_SAFARI, 'Safari'],
         ] as const;
-        
+
         for (const [regex, min, name] of checks) {
           const match = ua.match(regex);
           if (match && parseInt(match[1]) < min) {

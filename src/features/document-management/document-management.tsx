@@ -1,6 +1,6 @@
-import { useDocumentManagementLogic } from './hooks/use-document-management-logic';
-import { DocumentList } from './components/document-list';
 import { useModalContext } from '@shared/providers/modal-provider';
+import { DocumentList } from './components/document-list';
+import { useDocumentManagementLogic } from './hooks/use-document-management-logic';
 
 export const DocumentManagement = () => {
   const {
@@ -11,7 +11,7 @@ export const DocumentManagement = () => {
     handleDeleteDocument,
     handleRenameDocument,
   } = useDocumentManagementLogic();
-  
+
   const { alert } = useModalContext();
 
   const onCreateClick = () => {
@@ -29,7 +29,9 @@ export const DocumentManagement = () => {
     <div className="document-management">
       <div className="header">
         <span>All Docs</span>
-        <button onClick={onCreateClick} className="create-btn">+</button>
+        <button onClick={onCreateClick} className="create-btn">
+          +
+        </button>
       </div>
       <DocumentList
         documents={documents}

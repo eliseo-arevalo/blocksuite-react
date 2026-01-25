@@ -1,8 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
 import { Doc } from '@blocksuite/store';
-import { Icon } from '@shared/components/icon';
 import { useEditorContext } from '@infrastructure/editor';
+import { Icon } from '@shared/components/icon';
 import { ExtendedDocMeta, TreeNode } from '@shared/models/document.types';
+import { useCallback, useMemo, useState } from 'react';
 
 interface TreeItemProps {
   node: TreeNode;
@@ -16,14 +16,14 @@ interface TreeItemProps {
 const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: TreeItemProps) => {
   const isSelected = selectedId === node.id;
   const hasChildren = node.children && node.children.length > 0;
-  
+
   return (
     <div className="tree-item">
-      <div 
+      <div
         className={`tree-item-content ${isSelected ? 'selected' : ''}`}
         onClick={() => node.type === 'document' && onSelect(node.id)}
       >
-        <div 
+        <div
           className="tree-icon-container"
           onClick={(e) => {
             if (hasChildren) {
@@ -32,27 +32,27 @@ const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: T
             }
           }}
         >
-          <Icon 
+          <Icon
             name={hasChildren ? (node.isExpanded ? 'folderOpen' : 'folder') : 'document'}
             size={16}
             className="tree-item-icon"
           />
           {hasChildren && (
-            <Icon 
-              name={node.isExpanded ? 'chevronDown' : 'chevronRight'} 
+            <Icon
+              name={node.isExpanded ? 'chevronDown' : 'chevronRight'}
               size={14}
               className="tree-toggle-icon"
             />
           )}
         </div>
-        
+
         <span className="tree-item-name" title={node.name}>
           {node.name}
         </span>
-        
+
         <div className="tree-actions">
           {onAddChild && (
-            <button 
+            <button
               className="tree-action-btn"
               onClick={(e) => {
                 e.stopPropagation();
@@ -65,10 +65,10 @@ const TreeItem = ({ node, level, onToggle, onSelect, onAddChild, selectedId }: T
           )}
         </div>
       </div>
-      
+
       {hasChildren && node.isExpanded && (
         <div className="tree-children">
-          {node.children!.map(child => (
+          {node.children!.map((child) => (
             <TreeItem
               key={child.id}
               node={child}
@@ -94,19 +94,19 @@ interface SidebarProps {
   onCreateDocument: (title?: string, parentId?: string) => void;
 }
 
-export const Sidebar = ({ 
-  isOpen, 
-  documents, 
+export const Sidebar = ({
+  isOpen,
+  documents,
   documentMap,
-  activeDocId, 
+  activeDocId,
   onDocumentSelect,
-  onCreateDocument 
+  onCreateDocument,
 }: SidebarProps) => {
   const { collection } = useEditorContext();
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 
   const toggleNode = useCallback((id: string) => {
-    setExpandedNodes(prev => {
+    setExpandedNodes((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
@@ -117,18 +117,24 @@ export const Sidebar = ({
     });
   }, []);
 
-  const handleAddChild = useCallback((parentId: string) => {
-    onCreateDocument('New Page', parentId);
-    // Auto-expand parent when child is created
-    setExpandedNodes(prev => new Set([...prev, parentId]));
-  }, [onCreateDocument]);
+  const handleAddChild = useCallback(
+    (parentId: string) => {
+      onCreateDocument('New Page', parentId);
+      // Auto-expand parent when child is created
+      setExpandedNodes((prev) => new Set([...prev, parentId]));
+    },
+    [onCreateDocument]
+  );
 
-  const handleDocumentSelect = useCallback((docId: string) => {
-    const doc = documentMap.get(docId);
-    if (doc) {
-      onDocumentSelect(doc);
-    }
-  }, [documentMap, onDocumentSelect]);
+  const handleDocumentSelect = useCallback(
+    (docId: string) => {
+      const doc = documentMap.get(docId);
+      if (doc) {
+        onDocumentSelect(doc);
+      }
+    },
+    [documentMap, onDocumentSelect]
+  );
 
   // Build hierarchical tree structure
   const treeData: TreeNode[] = useMemo(() => {
@@ -136,23 +142,23 @@ export const Sidebar = ({
     const rootNodes: TreeNode[] = [];
 
     // First pass: create all nodes
-    documents.forEach(doc => {
+    documents.forEach((doc) => {
       const meta = collection.meta.getDocMeta(doc.id) as ExtendedDocMeta;
       const node: TreeNode = {
         id: doc.id,
         name: meta?.title || `Document ${doc.id.slice(0, 8)}`,
         type: 'document',
         isExpanded: expandedNodes.has(doc.id),
-        children: []
+        children: [],
       };
       nodeMap.set(doc.id, node);
     });
 
     // Second pass: build hierarchy
-    documents.forEach(doc => {
+    documents.forEach((doc) => {
       const meta = collection.meta.getDocMeta(doc.id) as ExtendedDocMeta;
       const node = nodeMap.get(doc.id)!;
-      
+
       if (meta?.parentId && nodeMap.has(meta.parentId)) {
         // Add to parent's children
         const parent = nodeMap.get(meta.parentId)!;
@@ -175,7 +181,7 @@ export const Sidebar = ({
           <Icon name="folder" size={18} />
           <span>Explorer</span>
         </div>
-        <button 
+        <button
           className="create-document-btn"
           onClick={() => onCreateDocument()}
           title="New Document"
@@ -183,21 +189,18 @@ export const Sidebar = ({
           <Icon name="add" size={16} />
         </button>
       </div>
-      
+
       <div className="sidebar-content">
         {treeData.length === 0 ? (
           <div className="empty-state">
             <Icon name="document" size={32} />
             <p>No documents yet</p>
-            <button 
-              className="empty-state-btn"
-              onClick={() => onCreateDocument()}
-            >
+            <button className="empty-state-btn" onClick={() => onCreateDocument()}>
               Create your first document
             </button>
           </div>
         ) : (
-          treeData.map(node => (
+          treeData.map((node) => (
             <TreeItem
               key={node.id}
               node={node}
