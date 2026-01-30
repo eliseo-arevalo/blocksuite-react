@@ -1,9 +1,9 @@
-import { useMemo, useState, useRef, useEffect } from 'react';
 import { Doc } from '@blocksuite/store';
+import { useEditorContext } from '@infrastructure/editor';
 import { Icon } from '@shared/components/icon';
 import { useTheme } from '@shared/contexts/theme-context';
-import { useEditorContext } from '@infrastructure/editor';
 import { ExtendedDocMeta } from '@shared/models/document.types';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -14,13 +14,13 @@ interface HeaderProps {
   onRenameDocument: (docId: string, newTitle: string) => void;
 }
 
-export const Header = ({ 
-  onToggleSidebar, 
+export const Header = ({
+  onToggleSidebar,
   isSidebarOpen,
   documents,
   activeDocId,
   onDocumentSelect,
-  onRenameDocument
+  onRenameDocument,
 }: HeaderProps) => {
   const { theme, toggleTheme } = useTheme();
   const { collection } = useEditorContext();
@@ -31,18 +31,18 @@ export const Header = ({
   const breadcrumbPath = useMemo(() => {
     if (!activeDocId) return [];
 
-    const path: Array<{ id: string; title: string; doc: any }> = [];
+    const path: Array<{ id: string; title: string; doc: Doc }> = [];
     let currentId: string | null = activeDocId;
 
     while (currentId) {
-      const doc = documents.find(d => d.id === currentId);
+      const doc = documents.find((d) => d.id === currentId);
       if (!doc) break;
 
       const meta = collection.meta.getDocMeta(currentId) as ExtendedDocMeta;
       path.unshift({
         id: currentId,
         title: meta?.title || `Document ${currentId.slice(0, 8)}`,
-        doc
+        doc,
       });
 
       currentId = meta?.parentId || null;
@@ -51,7 +51,7 @@ export const Header = ({
     return path;
   }, [activeDocId, documents, collection]);
 
-  const startEditing = (item: any) => {
+  const startEditing = (item: { id: string; title: string; doc: Doc }) => {
     setEditingId(item.id);
     setEditValue(item.title);
   };
@@ -79,7 +79,7 @@ export const Header = ({
   return (
     <header className="header">
       <div className="header-left">
-        <button 
+        <button
           className="sidebar-toggle"
           onClick={onToggleSidebar}
           aria-label={isSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
@@ -87,14 +87,14 @@ export const Header = ({
           <Icon name={isSidebarOpen ? 'close' : 'menu'} size={20} />
         </button>
       </div>
-      
+
       <div className="header-center">
         <div className="header-breadcrumb">
           <Icon name="home" size={14} />
           {breadcrumbPath.map((item, index) => {
             const isLast = index === breadcrumbPath.length - 1;
             const isEditing = editingId === item.id;
-            
+
             return (
               <div key={item.id} className="header-breadcrumb-item">
                 <Icon name="chevronRight" size={12} />
@@ -132,9 +132,9 @@ export const Header = ({
           })}
         </div>
       </div>
-      
+
       <div className="header-right">
-        <button 
+        <button
           className="theme-toggle"
           onClick={toggleTheme}
           aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}

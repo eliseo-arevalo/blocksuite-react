@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,7 +10,15 @@ interface ModalProps {
   onCancel?: () => void;
 }
 
-export function Modal({ isOpen, type, title, message, defaultValue, onConfirm, onCancel }: ModalProps) {
+export function Modal({
+  isOpen,
+  type,
+  title,
+  message,
+  defaultValue,
+  onConfirm,
+  onCancel,
+}: ModalProps) {
   const [inputValue, setInputValue] = useState(defaultValue || '');
 
   useEffect(() => {
@@ -42,24 +50,22 @@ export function Modal({ isOpen, type, title, message, defaultValue, onConfirm, o
 
   return (
     <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h3>{title}</h3>
         <p>{message}</p>
-        
+
         {type === 'prompt' && (
           <input
             type="text"
             value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
+            onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleInputKeyDown}
             autoFocus
           />
         )}
-        
+
         <div className="modal-buttons">
-          {type !== 'alert' && (
-            <button onClick={onCancel}>Cancelar</button>
-          )}
+          {type !== 'alert' && <button onClick={onCancel}>Cancelar</button>}
           <button onClick={handleConfirm} autoFocus={type !== 'prompt'}>
             {type === 'confirm' ? 'Confirmar' : 'Aceptar'}
           </button>

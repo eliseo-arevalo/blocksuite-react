@@ -1,8 +1,8 @@
-import { ReactNode, useState } from 'react';
 import { Doc } from '@blocksuite/store';
+import { useEditorConfig } from '@shared/contexts/editor-config-context';
+import { ReactNode, useState } from 'react';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
-import { useEditorConfig } from '@shared/contexts/editor-config-context';
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,29 +10,31 @@ interface LayoutProps {
   documentMap: Map<string, Doc>;
   activeDocId?: string;
   onDocumentSelect: (doc: Doc) => void;
-  onCreateDocument: (title?: string, parentId?: string) => void;
+  onCreateDocument: (title?: string, parentId?: string) => Doc | null;
   onRenameDocument: (docId: string, newTitle: string) => void;
+  onDocumentMove: (docId: string, newParentId: string | null) => void;
 }
 
-export const Layout = ({ 
-  children, 
-  documents, 
+export const Layout = ({
+  children,
+  documents,
   documentMap,
-  activeDocId, 
+  activeDocId,
   onDocumentSelect,
   onCreateDocument,
-  onRenameDocument 
+  onRenameDocument,
+  onDocumentMove,
 }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { widthMode } = useEditorConfig();
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   return (
     <div className="layout">
-      <Header 
+      <Header
         onToggleSidebar={toggleSidebar}
         isSidebarOpen={isSidebarOpen}
         documents={documents}
@@ -40,7 +42,7 @@ export const Layout = ({
         onDocumentSelect={onDocumentSelect}
         onRenameDocument={onRenameDocument}
       />
-      
+
       <div className="layout-body">
         <Sidebar
           isOpen={isSidebarOpen}
@@ -49,9 +51,12 @@ export const Layout = ({
           activeDocId={activeDocId}
           onDocumentSelect={onDocumentSelect}
           onCreateDocument={onCreateDocument}
+          onDocumentMove={onDocumentMove}
         />
-        
-        <main className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''} ${widthMode === 'full' ? 'content-full-width' : ''}`}>
+
+        <main
+          className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''} ${widthMode === 'full' ? 'content-full-width' : ''}`}
+        >
           {children}
         </main>
       </div>

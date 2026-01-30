@@ -5,9 +5,98 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BlockSuite Document Editor</title>
+    <style>
+      /* Inline critical CSS to prevent flash */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        background-color: #ffffff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html {
+          background-color: #1a1a1a;
+        }
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Initial loading screen */
+      #app-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        z-index: 9999;
+        transition: opacity 0.3s;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #app-loader {
+          background: #1a1a1a;
+        }
+        #app-loader * {
+          color: #e0e0e0 !important;
+          border-color: #333333 !important;
+        }
+      }
+
+      #app-loader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader-logo {
+        font-size: 48px;
+        margin-bottom: 24px;
+      }
+
+      .loader-title {
+        font-size: 18px;
+        font-weight: 400;
+        color: #1a1a1a;
+        margin-bottom: 24px;
+      }
+
+      .loader-spinner {
+        width: 32px;
+        height: 32px;
+        border: 2px solid #e0e0e0;
+        border-top-color: #333333;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
+    <!-- Loading screen -->
+    <div id="app-loader">
+      <div class="loader-logo">📝</div>
+      <div class="loader-title">BlockSuite Editor</div>
+      <div class="loader-spinner"></div>
+    </div>
+
+    <!-- App root -->
     <div id="root"></div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

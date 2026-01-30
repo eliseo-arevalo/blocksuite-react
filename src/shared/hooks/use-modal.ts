@@ -23,7 +23,7 @@ export function useModal() {
         onConfirm: () => {
           setModal(null);
           resolve();
-        }
+        },
       });
     });
   };
@@ -42,7 +42,7 @@ export function useModal() {
         onCancel: () => {
           setModal(null);
           resolve(false);
-        }
+        },
       });
     });
   };
@@ -62,7 +62,7 @@ export function useModal() {
         onCancel: () => {
           setModal(null);
           resolve(null);
-        }
+        },
       });
     });
   };

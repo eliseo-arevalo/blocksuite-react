@@ -1,29 +1,28 @@
 /* CSS Variables for Theme System */
 :root {
-  /* Light Theme */
+  /* Light Theme - Minimal */
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #e9ecef;
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --text-muted: #adb5bd;
-  --border-color: #dee2e6;
-  --border-hover: #adb5bd;
-  --accent-primary: #0d6efd;
-  --accent-hover: #0b5ed7;
-  --shadow: rgba(0, 0, 0, 0.1);
-  --shadow-hover: rgba(0, 0, 0, 0.15);
-  
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #f0f0f0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --border-color: #e0e0e0;
+  --border-hover: #d0d0d0;
+  --accent-primary: #333333;
+  --accent-hover: #000000;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
   /* Tree specific colors */
-  --tree-bg: #fafbfc;
-  --tree-hover: #f1f3f4;
-  --tree-selected: #e8f0fe;
-  --tree-selected-border: #1a73e8;
-  --tree-icon: #5f6368;
-  --tree-text: #202124;
-  
+  --tree-bg: #fafafa;
+  --tree-hover: #f5f5f5;
+  --tree-selected: #f0f0f0;
+  --tree-selected-border: #333333;
+  --tree-icon: #666666;
+  --tree-text: #1a1a1a;
+
   /* Typography */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -35,25 +34,24 @@
 /* Dark Theme */
 [data-theme="dark"] {
   --bg-primary: #1a1a1a;
-  --bg-secondary: #2d2d2d;
-  --bg-tertiary: #404040;
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --text-muted: #808080;
-  --border-color: #404040;
-  --border-hover: #606060;
-  --accent-primary: #4dabf7;
-  --accent-hover: #339af0;
-  --shadow: rgba(0, 0, 0, 0.3);
-  --shadow-hover: rgba(0, 0, 0, 0.4);
-  
+  --bg-secondary: #222222;
+  --bg-tertiary: #2a2a2a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #999999;
+  --text-muted: #666666;
+  --border-color: #333333;
+  --border-hover: #444444;
+  --accent-primary: #e0e0e0;
+  --accent-hover: #ffffff;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
   /* Tree dark theme */
-  --tree-bg: #1e1e1e;
-  --tree-hover: #2d2d30;
-  --tree-selected: #094771;
-  --tree-selected-border: #007acc;
-  --tree-icon: #cccccc;
-  --tree-text: #cccccc;
+  --tree-bg: #222222;
+  --tree-hover: #2a2a2a;
+  --tree-selected: #2a2a2a;
+  --tree-selected-border: #e0e0e0;
+  --tree-icon: #999999;
+  --tree-text: #e0e0e0;
 }
 
 /* Global Styles */
@@ -66,7 +64,9 @@ body {
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 #root {
@@ -86,9 +86,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 56px;
   padding: 0 16px;
-  background-color: var(--bg-secondary);
+  background: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
   z-index: 100;
 }
@@ -182,19 +182,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.15s;
 }
 
 .sidebar-toggle:hover,
 .theme-toggle:hover {
-  background-color: var(--bg-tertiary);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
@@ -214,12 +214,11 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
-  background-color: var(--bg-secondary);
+  width: 260px;
+  background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease;
 }
 
 .sidebar-header {
@@ -247,15 +246,14 @@ body {
   height: 24px;
   border: none;
   border-radius: 4px;
-  background: transparent;
-  color: var(--text-secondary);
+  background: var(--accent-primary);
+  color: var(--bg-primary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.15s;
 }
 
 .create-document-btn:hover {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
+  opacity: 0.8;
 }
 
 .sidebar-content {
@@ -420,15 +418,15 @@ body {
     z-index: 50;
     transform: translateX(-100%);
   }
-  
+
   .layout-body:has(.sidebar) .sidebar {
     transform: translateX(0);
   }
-  
+
   .main-content {
     margin-left: 0 !important;
   }
-  
+
   .header-center h1 {
     font-size: 16px;
   }
@@ -497,22 +495,23 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 16px;
+  padding: 4px 12px;
+  margin: 1px 8px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background 0.1s;
   position: relative;
-  min-height: 32px;
-  font-size: 14px;
+  min-height: 28px;
+  font-size: 13px;
   color: var(--text-primary);
+  border-radius: 3px;
 }
 
 .tree-item-content:hover {
-  background: var(--bg-secondary);
+  background: var(--tree-hover);
 }
 
 .tree-item-content.selected {
   background: var(--tree-selected);
-  color: var(--accent-primary);
   font-weight: 500;
 }
 
@@ -525,22 +524,23 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 16px;
+  padding: 4px 12px;
+  margin: 1px 8px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background 0.1s;
   position: relative;
-  min-height: 32px;
-  font-size: 14px;
+  min-height: 28px;
+  font-size: 13px;
   color: var(--text-primary);
+  border-radius: 3px;
 }
 
 .tree-item-content:hover {
-  background: var(--bg-secondary);
+  background: var(--tree-hover);
 }
 
 .tree-item-content.selected {
   background: var(--tree-selected);
-  color: var(--accent-primary);
   font-weight: 500;
 }
 
@@ -551,6 +551,10 @@ body {
   width: 20px;
   height: 20px;
   position: relative;
+}
+
+.tree-icon-container.has-children {
+  cursor: pointer;
 }
 
 .tree-item-icon {
@@ -580,11 +584,11 @@ body {
   padding: 1px;
 }
 
-.tree-item-content:hover .tree-toggle-icon {
+.tree-icon-container.has-children:hover .tree-toggle-icon {
   opacity: 1;
 }
 
-.tree-item-content:hover .tree-item-icon {
+.tree-icon-container.has-children:hover .tree-item-icon {
   opacity: 0;
 }
 
@@ -613,19 +617,57 @@ body {
   height: 20px;
   border: none;
   background: transparent;
-  border-radius: 4px;
+  border-radius: 3px;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background 0.1s;
 }
 
 .tree-action-btn:hover {
   background: var(--accent-primary);
-  color: white;
+  color: var(--bg-primary);
 }
 
 .tree-children {
   margin-left: 20px;
+}
+
+/* Drag & Drop */
+.tree-item-content[draggable="true"] {
+  cursor: move;
+}
+
+.tree-item-content.drag-over {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.tree-item-content.drag-over .tree-item-icon,
+.tree-item-content.drag-over .tree-item-name {
+  color: var(--bg-primary);
+}
+
+/* Root Drop Zone */
+.root-drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 8px 8px;
+  padding: 12px;
+  border: 2px dashed var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: all 0.15s;
+  opacity: 0.5;
+}
+
+.root-drop-zone.active {
+  border-color: var(--accent-primary);
+  background: var(--tree-hover);
+  color: var(--text-primary);
+  opacity: 1;
 }
 
 /* Empty State */
@@ -755,7 +797,7 @@ body {
 }
 
 .tree-loading::before {
-  content: '';
+  content: "";
   width: 16px;
   height: 16px;
   border: 2px solid var(--border-color);
@@ -766,8 +808,12 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 /* Editor Container */
 .editor-container {
@@ -779,7 +825,7 @@ body {
 .editor-settings {
   position: absolute;
   top: 20px;
-  right: 20px;  /* Esquina superior derecha */
+  right: 20px; /* Esquina superior derecha */
   z-index: 10;
 }
 
@@ -806,7 +852,7 @@ body {
 .editor-settings-menu {
   position: absolute;
   top: 36px;
-  right: 0;  /* Alineado a la derecha */
+  right: 0; /* Alineado a la derecha */
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -867,7 +913,7 @@ body {
 /* Full Width Mode - Uses ALL available space */
 .editor-full-width {
   max-width: none;
-  padding: 40px 0;  /* Sin padding lateral - TODO el ancho */
+  padding: 40px 0; /* Sin padding lateral - TODO el ancho */
 }
 
 /* Responsive adjustments */
@@ -875,9 +921,9 @@ body {
   .editor-page-width {
     padding: 40px 64px;
   }
-  
+
   .editor-full-width {
-    padding: 40px 0;  /* Sin padding lateral en tablets */
+    padding: 40px 0; /* Sin padding lateral en tablets */
   }
 }
 
@@ -885,26 +931,27 @@ body {
   .editor-page-width {
     padding: 20px 24px;
   }
-  
+
   .editor-full-width {
-    padding: 20px 0;  /* Sin padding lateral en móviles */
+    padding: 20px 0; /* Sin padding lateral en móviles */
   }
 }
 
 /* Font Family Options - Apply to BlockSuite content */
 .font-system,
 .font-system * {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif !important;
 }
 
 .font-serif,
 .font-serif * {
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: Georgia, "Times New Roman", Times, serif !important;
 }
 
 .font-mono,
 .font-mono * {
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+  font-family:
+    "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
 }
 
 /* Editor Width Modes - Notion Style */
@@ -983,4 +1030,128 @@ body {
   opacity: 0.8;
 }
 
+/* ========================================
+   Toast Notifications
+   ======================================== */
 
+.toast-container {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 500px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  animation: toast-slide-in 0.2s ease-out;
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 400px;
+  background: var(--bg-primary);
+}
+
+.toast-exit {
+  animation: toast-slide-out 0.2s ease-in forwards;
+}
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  transition: background 0.1s;
+  color: var(--text-secondary);
+}
+
+.toast-close:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Toast variants */
+.toast-success {
+  border-left: 3px solid #10b981;
+}
+
+.toast-error {
+  border-left: 3px solid #ef4444;
+}
+
+.toast-warning {
+  border-left: 3px solid #f59e0b;
+}
+
+.toast-info {
+  border-left: 3px solid #333333;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .toast-container {
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 400px;
+  }
+
+  .toast {
+    min-width: auto;
+    max-width: none;
+    width: 100%;
+  }
+}

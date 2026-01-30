@@ -1,7 +1,6 @@
-import { AffineEditorContainer } from '@blocksuite/presets';
-import { Schema } from '@blocksuite/store';
-import { DocCollection } from '@blocksuite/store';
 import { AffineSchemas } from '@blocksuite/blocks';
+import { AffineEditorContainer } from '@blocksuite/presets';
+import { DocCollection, Schema } from '@blocksuite/store';
 import '@blocksuite/presets/themes/affine.css';
 
 export function createEditorInstance() {
@@ -16,7 +15,7 @@ export function createEditorInstance() {
     const noteId = demoDoc.addBlock('affine:note', {}, pageBlockId);
     demoDoc.addBlock('affine:paragraph', {}, noteId);
   });
-  
+
   collection.setDocMeta(demoDoc.id, { title: '📝 Start Writing Here' });
 
   const editor = new AffineEditorContainer();

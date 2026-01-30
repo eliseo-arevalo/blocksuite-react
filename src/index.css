@@ -22,7 +22,7 @@
 }
 
 .document-management .create-btn {
-  background: #2196F3;
+  background: #2196f3;
   color: white;
   border: none;
   border-radius: 4px;
@@ -34,7 +34,7 @@
 }
 
 .document-management .create-btn:hover {
-  background: #1976D2;
+  background: #1976d2;
 }
 
 .doc-list {

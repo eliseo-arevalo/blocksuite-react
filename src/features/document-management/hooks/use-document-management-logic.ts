@@ -1,18 +1,16 @@
-import { useState, useEffect } from 'react';
 import { Doc } from '@blocksuite/store';
 import { useEditorContext } from '@infrastructure/editor';
-import { useDocuments } from './use-documents';
+import { useToastContext } from '@shared/providers/toast-provider';
+import { sanitizeHtml } from '@shared/utils/sanitize';
+import { useEffect } from 'react';
+import { moveDocument } from '../services/document-move-service';
 import { createDocument, deleteDocument, renameDocument } from '../services/document-service';
+import { useDocuments } from './use-documents';
 
 export const useDocumentManagementLogic = () => {
   const { editor, collection } = useEditorContext();
   const { documents, documentMap, forceUpdate } = useDocuments();
-  const [activeDoc, setActiveDoc] = useState<Doc | null>(editor.doc);
-
-  // Sync activeDoc with editor.doc changes
-  useEffect(() => {
-    setActiveDoc(editor.doc);
-  }, [editor.doc]);
+  const toast = useToastContext();
 
   // Navigate to document when a link is clicked in the editor
   useEffect(() => {
@@ -20,7 +18,6 @@ export const useDocumentManagementLogic = () => {
       const targetDoc = collection.getDoc(docId);
       if (targetDoc) {
         editor.doc = targetDoc;
-        setActiveDoc(targetDoc);
       }
     });
     return () => disposable.dispose();
@@ -28,14 +25,17 @@ export const useDocumentManagementLogic = () => {
 
   const handleDocumentSelect = (doc: Doc) => {
     editor.doc = doc;
-    setActiveDoc(doc);
   };
 
   const handleCreateDocument = (title: string, parentId?: string) => {
     if (title && title.trim()) {
       const newDoc = createDocument(collection, title.trim(), parentId);
+      if (!newDoc) {
+        toast.error('Cannot create: maximum nesting depth (4 levels) reached');
+        return null;
+      }
       editor.doc = newDoc;
-      setActiveDoc(newDoc);
+      toast.success(`Document "${title.trim()}" created successfully`);
       return newDoc;
     }
     return null;
@@ -43,33 +43,71 @@ export const useDocumentManagementLogic = () => {
 
   const handleDeleteDocument = (docId: string) => {
     if (documents.length <= 1) {
+      toast.error('Cannot delete the last document');
       return { success: false, error: 'Cannot delete the last document' };
     }
-    
-    if (activeDoc?.id === docId) {
-      const nextDoc = documents.find(d => d.id !== docId);
+
+    const meta = collection.meta.getDocMeta(docId) as { title?: string } | null;
+    const rawTitle = meta?.title || 'Document';
+    const docTitle = sanitizeHtml(rawTitle);
+
+    if (editor.doc?.id === docId) {
+      const nextDoc = documents.find((d) => d.id !== docId);
       if (nextDoc) {
         editor.doc = nextDoc;
-        setActiveDoc(nextDoc);
       }
     }
-    
-    deleteDocument(collection, docId);
-    return { success: true };
+
+    const success = deleteDocument(collection, docId);
+    if (success) {
+      toast.success(`"${docTitle}" deleted successfully`);
+      return { success: true };
+    } else {
+      toast.error('Failed to delete document');
+      return { success: false, error: 'Failed to delete document' };
+    }
   };
 
   const handleRenameDocument = (docId: string, newTitle: string) => {
-    renameDocument(collection, docId, newTitle);
-    forceUpdate();
+    const success = renameDocument(collection, docId, newTitle);
+    if (success) {
+      forceUpdate();
+      toast.info(`Document renamed to "${newTitle}"`);
+    } else {
+      toast.error('Failed to rename document: invalid title or document not found');
+    }
+  };
+
+  const handleMoveDocument = (docId: string, newParentId: string | null) => {
+    const success = moveDocument(collection, docId, newParentId);
+
+    if (success) {
+      forceUpdate();
+
+      const docMeta = collection.meta.getDocMeta(docId) as { title?: string } | null;
+      const rawDocTitle = docMeta?.title || 'Document';
+      const docTitle = sanitizeHtml(rawDocTitle);
+      if (newParentId) {
+        const parentMeta = collection.meta.getDocMeta(newParentId) as { title?: string } | null;
+        const rawParentTitle = parentMeta?.title || 'Document';
+        const parentTitle = sanitizeHtml(rawParentTitle);
+        toast.success(`"${docTitle}" moved into "${parentTitle}"`);
+      } else {
+        toast.success(`"${docTitle}" moved to root`);
+      }
+    } else {
+      toast.error('Cannot move: maximum nesting depth (4 levels) or circular reference');
+    }
   };
 
   return {
     documents,
     documentMap,
-    activeDoc,
+    activeDoc: editor.doc,
     handleDocumentSelect,
     handleCreateDocument,
     handleDeleteDocument,
     handleRenameDocument,
+    handleMoveDocument,
   };
 };
